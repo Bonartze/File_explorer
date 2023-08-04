@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <execution>
 
 using namespace std;
 
@@ -75,7 +76,7 @@ vector<pair<int, int>> FindAllDocuments(
     for (auto [document_id, relevance]: document_to_relevance) {
         found_documents.push_back({document_id, relevance});
     }
-    sort(found_documents.begin(), found_documents.end(), [](auto &val1, auto val2) {
+    sort(execution::par, found_documents.begin(), found_documents.end(), [](auto &val1, auto val2) {
         if (val1.second != val2.second)
             return val1.second > val2.second;
         return val1.first > val2.first;
@@ -112,7 +113,7 @@ vector<pair<int, int>> FindTopDocuments(const map<string, set<int>> &word_to_doc
     for (auto [document_id, relevance]: document_to_relevance) {
         found_documents.push_back({document_id, relevance});
     }
-    sort(found_documents.begin(), found_documents.end(), [](auto &val1, auto &val2) {
+    sort(execution::par, found_documents.begin(), found_documents.end(), [](auto &val1, auto &val2) {
         if (val1.second != val2.second)
             return val1.second > val2.second;
         return val1.first > val2.first;
