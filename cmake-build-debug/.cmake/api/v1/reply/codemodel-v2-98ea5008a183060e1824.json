@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.26"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "src",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "src::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-src-Debug-c95626c3e03302553cd8.json",
+					"name" : "src",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/ivan/Desktop/C++/[SuperSliv.biz] [\u042f\u043d\u0434\u0435\u043a\u0441.\u041f\u0440\u0430\u043a\u0442\u0438\u043a\u0443\u043c] \u0420\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u0447\u0438\u043a C++ (2021)/[SuperSliv.biz] 01 \u041e\u0441\u043d\u043e\u0432\u043d\u044b\u0435 \u043a\u043e\u043c\u043f\u043e\u043d\u0435\u043d\u0442\u044b C++/01 \u0421\u043f\u0440\u0438\u043d\u0442 1/02 \u0411\u0430\u0437\u043e\u0432\u044b\u0435 \u0430\u043b\u0433\u043e\u0440\u0438\u0442\u043c\u044b/04 \u0410\u043b\u0433\u043e\u0440\u0438\u0442\u043c accumulate/\u0417\u0430\u0434\u0430\u043d\u0438\u0435 2/src/cmake-build-debug",
+		"source" : "/home/ivan/Desktop/C++/[SuperSliv.biz] [\u042f\u043d\u0434\u0435\u043a\u0441.\u041f\u0440\u0430\u043a\u0442\u0438\u043a\u0443\u043c] \u0420\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u0447\u0438\u043a C++ (2021)/[SuperSliv.biz] 01 \u041e\u0441\u043d\u043e\u0432\u043d\u044b\u0435 \u043a\u043e\u043c\u043f\u043e\u043d\u0435\u043d\u0442\u044b C++/01 \u0421\u043f\u0440\u0438\u043d\u0442 1/02 \u0411\u0430\u0437\u043e\u0432\u044b\u0435 \u0430\u043b\u0433\u043e\u0440\u0438\u0442\u043c\u044b/04 \u0410\u043b\u0433\u043e\u0440\u0438\u0442\u043c accumulate/\u0417\u0430\u0434\u0430\u043d\u0438\u0435 2/src"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 5
+	}
+}
