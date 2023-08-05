@@ -12,7 +12,7 @@ int main() {
         ss.AddDocument(document_id, s);
     }
     const string query = SearchServer::ReadLine();
-    for (auto [document_id, relevance]: ss.FindTopDocuments(query)) {
+    for (auto [document_id, relevance]: ss.FindAllDocuments(query)) {
         cout << "{ document_id = " << document_id << ", relevance = " << relevance << " }" << endl;
     }
 }

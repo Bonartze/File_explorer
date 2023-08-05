@@ -24,6 +24,8 @@ private:
     map<string, multiset<int>> word_to_documents;
     set<string> minus_words;
     set<string> plus_words;
+
+
 private:
     double count_relevance(int);
 

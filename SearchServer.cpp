@@ -157,6 +157,8 @@ vector<string> SearchServer::SplitIntoWordsNoStop(const string &text) {
         if (stop_words.count(word) == 0) {
             words.push_back(word);
         }
+        if (!word.empty() && word.at(0) == '-')
+            minus_words.insert(word);
     }
     return words;
 }
