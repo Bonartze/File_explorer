@@ -20,6 +20,7 @@ class SearchServer {
 private:
     set<string> stop_words;
     map<string, set<int>> word_to_documents;
+    set<string> minus_words;
 
 private:
     static vector<string> SplitIntoWords(const string &);
@@ -27,6 +28,8 @@ private:
     void ParseStopWords(const string &);
 
     vector<string> SplitIntoWordsNoStop(const string &text);
+
+    void AvoidMinusWords(vector<Document>&);
 
 public:
     void SetStopWords();
