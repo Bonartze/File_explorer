@@ -15,6 +15,7 @@ using std::string, std::vector, std::set, std::map, std::cin, std::cout, std::en
 struct Document {
     int id;
     double relevance;
+    int rate;
 };
 
 class SearchServer {
@@ -38,6 +39,11 @@ private:
     void AvoidMinusWords(vector<Document> &);
 
 public:
+
+    static int GetRates();
+
+    static int ComputeAverageRating(const vector<int> &);
+
     void SetDocumentCount(int);
 
     void DivideByWords(const string &);
@@ -46,7 +52,7 @@ public:
 
     void SetStopWords();
 
-    vector<Document> FindAllDocuments(const string &query);
+    vector<Document> FindAllDocuments(const string &query, const vector<int> &);
 
     void AddDocument(int, string &);
 

@@ -33,7 +33,7 @@ void SearchServer::DivideByWords(const std::string &query) {
     }
 }
 
-vector<Document> SearchServer::FindAllDocuments(const string &query) {
+vector<Document> SearchServer::FindAllDocuments(const string &query, const vector<int> &rates) {
 
     DivideByWords(query);
     map<int, double> document_to_relevance;
@@ -46,8 +46,9 @@ vector<Document> SearchServer::FindAllDocuments(const string &query) {
         }
     }
     vector<Document> found_documents;
+
     for (auto [document_id, relevance]: document_to_relevance) {
-        found_documents.push_back({document_id, relevance});
+        found_documents.push_back({document_id, relevance, rates[document_id]});
     }
     if (!found_documents.empty())
         AvoidMinusWords(found_documents);
@@ -105,14 +106,6 @@ double SearchServer::count_relevance(int id) {
 vector<Document> SearchServer::FindTopDocuments(const string &query) {
     DivideByWords(query);
     map<int, double> document_to_relevance;
-    /*for (const string &word: plus_words) {
-        if (word_to_documents.count(word) == 0) {
-            continue;
-        }
-        for (const int document_id: word_to_documents.at(word)) {
-            ++document_to_relevance[document_id];
-        }
-    }*/
     for (size_t i = 0; i < document_count; i++)
         document_to_relevance[i] = count_relevance(i);
     vector<Document> found_documents;
@@ -127,6 +120,21 @@ vector<Document> SearchServer::FindTopDocuments(const string &query) {
         return val1.id > val2.id;
     });
     return {found_documents.begin(), min(found_documents.begin() + MAX_RESULT_DOCUMENT_COUNT, found_documents.end())};
+}
+
+int SearchServer::GetRates() {
+    size_t n;
+    cin >> n;
+    vector<int> rates(n);
+    for (size_t i = 0; i < n; i++)
+        cin >> rates[i];
+    string s, s1;
+    getline(cin, s);
+    return ComputeAverageRating(rates);
+}
+
+int SearchServer::ComputeAverageRating(const vector<int> &ratings) {
+    return std::accumulate(ratings.begin(), ratings.end(), 0) / (int) ratings.size();
 }
 
 vector<string> SearchServer::SplitIntoWords(const string &text) {
