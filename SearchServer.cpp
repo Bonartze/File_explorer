@@ -26,14 +26,14 @@ void SearchServer::AvoidMinusWords(vector<Document> &found_documents) {
 
 void SearchServer::DivideByWords(const std::string &query) {
     for (auto word: SplitIntoWords(query)) {
-        if (word.at(0) == '-')
+        if (!word.empty() && word.at(0) == '-')
             minus_words.insert(word);
         else
             plus_words.insert(word);
     }
 }
 
-vector<Document> SearchServer::FindAllDocuments(const string &query, const vector<int> &rates) {
+vector<Document> SearchServer::FindAllDocuments(const string &query, vector<int> rates) {
 
     DivideByWords(query);
     map<int, double> document_to_relevance;
@@ -48,21 +48,36 @@ vector<Document> SearchServer::FindAllDocuments(const string &query, const vecto
     vector<Document> found_documents;
 
     for (auto [document_id, relevance]: document_to_relevance) {
-        found_documents.push_back({document_id, relevance, rates[document_id]});
+        if (!rates.empty())
+            found_documents.push_back({document_id, relevance, rates[document_id]});
+        else
+            found_documents.push_back({document_id, relevance, 0});
+
     }
     if (!found_documents.empty())
         AvoidMinusWords(found_documents);
     sort(std::execution::par, found_documents.begin(), found_documents.end(), [](auto &val1, auto val2) {
-        if (val1.relevance != val2.relevance)
-            return val1.relevance > val2.relevance;
-        return val1.id > val2.id;
+        return std::tie(val1.relevance, val1.id) < std::tie(val2.relevance, val2.id);
     });
+    plus_words.clear();
+    minus_words.clear();
     return found_documents;
 }
 
-void SearchServer::AddDocument(int document_id, string &document) {
+vector<Document> SearchServer::FindAllDocuments(const string &query, const vector<int> &rates, auto lambda) {
+    vector<Document> res;
+    for (auto &element: FindAllDocuments(query, rates)) {
+        if (lambda(element.id, element.rate, element.relevance))
+            res.push_back(element);
+    }
+    return res;
+}
+
+
+void SearchServer::AddDocument(int document_id, string document, DocumentStatus documentStatus) {
     for (const string &word: SplitIntoWordsNoStop(document)) {
         word_to_documents[word].insert(document_id);
+        statuses.push_back(documentStatus);
     }
 }
 
@@ -115,10 +130,11 @@ vector<Document> SearchServer::FindTopDocuments(const string &query) {
     if (!found_documents.empty())
         AvoidMinusWords(found_documents);
     sort(std::execution::par, found_documents.begin(), found_documents.end(), [&](auto &val1, auto &val2) {
-        if (val1.relevance != val2.relevance)
-            return val1.relevance > val2.relevance;
-        return val1.id > val2.id;
+        return std::tie(val1.relevance, val1.id) > std::tie(val2.relevance, val2.id) &&
+               statuses[val2.id] == DocumentStatus::ACTUAL;
     });
+    plus_words.clear();
+    minus_words.clear();
     return {found_documents.begin(), min(found_documents.begin() + MAX_RESULT_DOCUMENT_COUNT, found_documents.end())};
 }
 
@@ -149,7 +165,6 @@ vector<string> SearchServer::SplitIntoWords(const string &text) {
         }
     }
     words.push_back(word);
-
     return words;
 }
 
@@ -169,4 +184,21 @@ vector<string> SearchServer::SplitIntoWordsNoStop(const string &text) {
             minus_words.insert(word);
     }
     return words;
+}
+
+map<string, multiset<int>> SearchServer::getWordToDocument() {
+    return word_to_documents;
+}
+
+
+set<string> SearchServer::GetMinusWords() {
+    return minus_words;
+}
+
+set<string> SearchServer::GetStopWords() {
+    return stop_words;
+}
+
+void SearchServer::SetStopWords(set<string> &s_w) {
+    stop_words = s_w;
 }

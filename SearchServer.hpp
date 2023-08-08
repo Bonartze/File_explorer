@@ -6,21 +6,32 @@
 #include <vector>
 #include <algorithm>
 #include <execution>
+#include <functional>
 
 #pragma once
 const size_t MAX_RESULT_DOCUMENT_COUNT = 5;
 
-using std::string, std::vector, std::set, std::map, std::cin, std::cout, std::endl, std::multiset;
+using std::string, std::vector, std::set, std::map, std::cin, std::cout, std::endl, std::multiset, std::cerr;
+
+enum class DocumentStatus {
+    ACTUAL, IRRELEVANT, BANNED, REMOVED
+};
 
 struct Document {
     int id;
     double relevance;
     int rate;
+
+    bool operator==(Document document) const {
+        return id == document.id && relevance == document.relevance && rate == document.rate;
+    }
 };
+
 
 class SearchServer {
 private:
     int document_count;
+    vector<DocumentStatus> statuses;
     set<string> stop_words;
     map<string, multiset<int>> word_to_documents;
     set<string> minus_words;
@@ -34,13 +45,19 @@ private:
 
     void ParseStopWords(const string &);
 
-    vector<string> SplitIntoWordsNoStop(const string &text);
 
     void AvoidMinusWords(vector<Document> &);
 
 public:
 
+    vector<string> SplitIntoWordsNoStop(const string &text);
+
+
+    set<string> GetMinusWords();
+
     static int GetRates();
+
+    map<string, multiset<int>> getWordToDocument();
 
     static int ComputeAverageRating(const vector<int> &);
 
@@ -52,9 +69,15 @@ public:
 
     void SetStopWords();
 
-    vector<Document> FindAllDocuments(const string &query, const vector<int> &);
+    void SetStopWords(set<string> &);
 
-    void AddDocument(int, string &);
+    set<string> GetStopWords();
+
+    vector<Document> FindAllDocuments(const string &, vector<int>);
+
+    vector<Document> FindAllDocuments(const string &, const vector<int> &, auto);
+
+    void AddDocument(int, string, DocumentStatus documentStatus);
 
 // For each document returns its id and relevance
 
