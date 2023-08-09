@@ -2,6 +2,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include <sstream>
 #include <cmath>
 #include <vector>
 #include <algorithm>
@@ -52,6 +53,10 @@ public:
 
     vector<string> SplitIntoWordsNoStop(const string &text);
 
+    SearchServer(const string &s = "");
+
+    template<class Container>
+    SearchServer(Container &);
 
     set<string> GetMinusWords();
 

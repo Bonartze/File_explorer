@@ -2,6 +2,9 @@
 #include <cassert>
 
 namespace UnitTesting {
+    UnitTests::UnitTests() : ss(SearchServer()) {
+    }
+
     bool UnitTests::TestAddDocument() {
         ss.SetDocumentCount(3);
         ss.AddDocument(0, "Just test", DocumentStatus::ACTUAL);

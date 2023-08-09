@@ -157,12 +157,13 @@ vector<string> SearchServer::SplitIntoWords(const string &text) {
     vector<string> words;
     string word;
     for (const char c: text) {
-        if (c == ' ') {
+        if (c == ' ' && word != " ") {
             words.push_back(word);
             word = "";
-        } else {
+        } else if (word != " ") {
             word += c;
-        }
+        } else
+            word.clear();
     }
     words.push_back(word);
     return words;
@@ -201,4 +202,19 @@ set<string> SearchServer::GetStopWords() {
 
 void SearchServer::SetStopWords(set<string> &s_w) {
     stop_words = s_w;
+}
+
+SearchServer::SearchServer(const std::string &s) {
+    std::stringstream ss{s};
+    string word;
+    while (ss >> word) {
+        stop_words.insert(word);
+    }
+}
+
+template<typename Container>
+SearchServer::SearchServer(Container &container) {
+    for (const auto word: container) {
+        stop_words.insert(word);
+    }
 }

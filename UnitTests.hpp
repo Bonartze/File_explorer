@@ -7,6 +7,8 @@ namespace UnitTesting {
     private:
         SearchServer ss;
     public:
+        UnitTests();
+
         bool TestAddDocument();
 
         bool TestMinusWords();
